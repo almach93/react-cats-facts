@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+
+
 
 function App() {
+  const [imgUrl, setUrl] = useState("");
+  const [textUrl, setText] = useState("");
+  const callImg = () => {
+    fetch("https://cataas.com/cat")
+      .then((res) => res.blob())
+      .then((data) => setUrl(data[0].url));
+    fetch("https://cat-fact.herokuapp.com/facts")
+      .then((res) => res.json())
+      .then((data) => setText(data.text));
+  }
+    
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+    <div>
+      <div className="content">
+        <div className="image">
+          <img src={imgUrl} alt="cat" />
+        </div>
+        <p className="description">
+          {textUrl}
+          Click on <strong>New Fact</strong> to fetch some facts
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <button className="btn" onClick={() => callImg()}>
+          New fact
+        </button>
+      </div>
     </div>
   );
 }
